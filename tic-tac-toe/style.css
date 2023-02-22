@@ -60,6 +60,10 @@ button:hover {
   background: #ff3a3a;
 }
 
+.winning {
+  color: green;
+}
+
 #block_0,
 #block_1,
 #block_2 {

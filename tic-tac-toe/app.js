@@ -1,107 +1,104 @@
-let play_board = ["", "", "", "", "", "", "", "", ""];
+let board = ["", "", "", "", "", "", "", "", ""];
 const board_container = document.querySelector(".play-area");
+const player_x = "X";
+const player_o = "O";
+let current_player = player_x;
 const winner = document.querySelector(".winner");
-const player = "O";
-const computer = "X";
-let board_full = false;
 
-const render_board = () => {
+// Function to render the board
+const renderBoard = () => {
   board_container.innerHTML = "";
-  play_board.forEach((e, i) => {
-    board_container.innerHTML += `<div id="block_${i}" class="block" onclick="addPlayerMove(${i})">${play_board[i]}</div>`;
-    if (e == player || e == computer) {
+  board.forEach((e, i) => {
+    board_container.innerHTML += `<div id="block_${i}" class="block" onclick="addPlayerMove(${i})">${board[i]}</div>`;
+    if (e == player_x || e == player_o) {
       document.querySelector(`#block_${i}`).classList.add("occupied");
     }
   });
 };
 
-const addPlayerMove = (e) => {
-  if (!board_full && play_board[e] == "") {
-    play_board[e] = player;
-    game_loop();
-    addComputerMove();
+// Function to add move
+const addPlayerMove = (i) => {
+  if (board[i] == "") {
+    board[i] = current_player;
+    updateGameState();
+    renderBoard();
   }
 };
 
-const addComputerMove = () => {
-  if (!board_full) {
-    do {
-      selected = Math.floor(Math.random() * 9);
-    } while (play_board[selected] != "");
-    play_board[selected] = computer;
-    game_loop();
-  }
-};
-
-const check_board_full = () => {
-  let flag = true;
-  play_board.forEach((element) => {
-    if (element != player && element != computer) {
-      flag = false;
+const updateGameState = () => {
+  result = checkForWinner();
+  if (result) {
+    winning_player = board[result[0]];
+    if (winning_player == player_x) {
+      winner.innerText = "Winner is Player 1!";
+      winner.classList.add("playerWin");
+    } else {
+      winner.innerText = "Winner is Player 2!";
+      winner.classList.add("computerWin");
     }
-  });
-  board_full = flag;
-};
-
-const game_loop = () => {
-  render_board();
-  check_board_full();
-  check_for_winner();
-};
-
-const winner_statement = document.getElementById("winner");
-const check_for_winner = () => {
-  let res = check_match();
-  if (res == player) {
-    winner.innerText = "Winner is player!!";
-    winner.classList.add("playerWin");
-    board_full = true;
-  } else if (res == computer) {
-    winner.innerText = "Winner is computer";
-    winner.classList.add("computerWin");
-    board_full = true;
-  } else if (board_full) {
+    result.forEach((e, i) => {
+      document.querySelector(`#block_${e}`).classList.add("winning");
+      console.log(e);
+    });
+  }
+  if (isBoardFull()) {
     winner.innerText = "Draw!";
     winner.classList.add("draw");
   }
+  current_player = current_player == player_x ? player_o : player_x;
 };
 
-const check_line = (a, b, c) => {
+const checkTiles = (a, b, c) => {
   return (
-    play_board[a] == play_board[b] &&
-    play_board[b] == play_board[c] &&
-    (play_board[a] == player || play_board[a] == computer)
+    board[a] == board[b] &&
+    board[b] == board[c] &&
+    (board[a] == player_x || board[b] == player_o)
   );
 };
 
-const check_match = () => {
-  for (i = 0; i < 9; i += 3) {
-    if (check_line(i, i + 1, i + 2)) {
-      return play_board[i];
+const checkForWinner = () => {
+  // check rows
+  for (let i = 0; i < 9; i += 3) {
+    if (checkTiles(i, i + 1, i + 2)) {
+      return [i, i + 1, i + 2];
     }
   }
-  for (i = 0; i < 3; i++) {
-    if (check_line(i, i + 3, i + 6)) {
-      return play_board[i];
+
+  // check columns
+  for (let i = 0; i < 3; i++) {
+    if (checkTiles(i, i + 3, i + 6)) {
+      return [i, i + 3, i + 6];
     }
   }
-  if (check_line(0, 4, 8)) {
-    return play_board[0];
+
+  // check diagonals
+  if (checkTiles(0, 4, 8)) {
+    return [0, 4, 8];
   }
-  if (check_line(2, 4, 6)) {
-    return play_board[2];
+  if (checkTiles(2, 4, 6)) {
+    return [2, 4, 6];
   }
-  return "";
+
+  return null;
 };
 
-const reset_board = () => {
-  play_board = ["", "", "", "", "", "", "", "", ""];
-  board_full = false;
+const isBoardFull = () => {
+  for (let i = 0; i < 9; i++) {
+    if (board[i] == "") {
+      return false;
+    }
+  }
+  return true;
+};
+
+const resetBoard = () => {
+  board = ["", "", "", "", "", "", "", "", ""];
+  current_player = player_x;
   winner.classList.remove("playerWin");
   winner.classList.remove("computerWin");
   winner.classList.remove("draw");
   winner.innerText = "";
-  render_board();
+  renderBoard();
 };
 
-render_board();
+renderBoard();
