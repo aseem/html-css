@@ -1,0 +1,15 @@
+<h2>Counter: {{ counter }}</h2>
+<button
+  class="btn btn-success"
+  [disabled]="counterStarted"
+  (click)="onStartCounter()"
+>
+  Start Counter
+</button>
+<button
+  class="btn btn-danger"
+  [disabled]="!counterStarted"
+  (click)="onStopCounter()"
+>
+  Stop Counter
+</button>
