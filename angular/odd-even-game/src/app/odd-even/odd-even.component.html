@@ -1,0 +1,7 @@
+<div>
+  <p *ngIf="value % 2 == 0; else Odd">Even: {{ value }}</p>
+</div>
+
+<ng-template #Odd>
+  <p>Odd: {{ value }}</p>
+</ng-template>

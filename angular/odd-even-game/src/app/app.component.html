@@ -9,6 +9,12 @@
           (counterUpdated)="onCounterUpdated($event)"
         ></app-game>
       </div>
+      <div class="col-xs-6">
+        <app-odd-even
+          *ngFor="let value of counterValues"
+          [value]="value"
+        ></app-odd-even>
+      </div>
     </div>
   </div>
 </div>

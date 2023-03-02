@@ -3,11 +3,13 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import { GameComponent } from './game/game.component';
+import { OddEvenComponent } from './odd-even/odd-even.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    GameComponent
+    GameComponent,
+    OddEvenComponent
   ],
   imports: [
     BrowserModule
