@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-game',
@@ -10,6 +10,11 @@ export class GameComponent implements OnInit {
   counterStarted: boolean = false;
   counterInterval;
 
+  @Output() counterUpdated = new EventEmitter<{
+    counter: number;
+  }>();
+  @Output() counterStopped = new EventEmitter<{}>();
+
   constructor() {}
 
   ngOnInit(): void {}
@@ -19,6 +24,9 @@ export class GameComponent implements OnInit {
     console.log('Counter Started!');
     this.counterInterval = setInterval(() => {
       this.counter++;
+      this.counterUpdated.emit({
+        counter: this.counter,
+      });
       console.log(this.counter);
     }, 1000);
   }
@@ -28,5 +36,6 @@ export class GameComponent implements OnInit {
     this.counter = 0;
     console.log('Counter Stopped!');
     clearInterval(this.counterInterval);
+    this.counterStopped.emit({});
   }
 }
