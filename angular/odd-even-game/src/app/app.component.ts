@@ -7,13 +7,20 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'odd-even-game';
-  gameCounterValue = 0;
+  counterValues = [];
 
   onCounterStop() {
-    this.gameCounterValue = 0;
+    this.counterValues = [];
   }
 
   onCounterUpdated(counterData: { counter: number }) {
-    this.gameCounterValue = counterData.counter;
+    this.counterValues.push(counterData.counter);
+  }
+
+  currentCounterValue() {
+    if (this.counterValues.length == 0) {
+      return 0;
+    }
+    return this.counterValues[this.counterValues.length - 1];
   }
 }
