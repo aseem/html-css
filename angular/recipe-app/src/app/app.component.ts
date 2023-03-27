@@ -8,9 +8,4 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'recipe-app';
   loadedFeature = 'recipe';
-
-  onNavigate(selected) {
-    console.log('User Selected: ' + selected);
-    this.loadedFeature = selected;
-  }
 }
